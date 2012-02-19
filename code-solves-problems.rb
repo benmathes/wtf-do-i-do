@@ -15,7 +15,7 @@ require 'pp'
 # allow a few ratings: remove paradox of choice (i.e. 8/10? 9/10? 8.5/10?),
 # think of it as forcing me to shit or get off the pot.
 qs = {
-  'a' => 4, # absolutely
+  'a' => 3, # absolutely
   'y' => 2, # yes
   'm' => 1, # maybe
   'w' => -1 # worrisome
@@ -27,7 +27,8 @@ category_weights = {
   'comp' => 'm',
   'daily life' => 'a',
   'potential' => 'y',
-  'gut' => 'y'
+  'gut' => 'y',
+  'meta-goals' => 'm'
 }
 
 # category => criteria => qualitative rating for [ lytro, euclid, angellist, sincerely ]
@@ -35,6 +36,11 @@ categories = {
   'gut' => {
     'looking at campus photos' => %w{w y y y},
     'looking at personell photos' => %w{m y m y},
+  },
+  'meta-goals' => {
+    'living in SF' => %w{m y a a},
+    'living young while young' => %w{w y a a},
+    'build network' => %w{y m y y},
   },
   'comp' => {
     'salary' => %w{y y m y},
@@ -72,12 +78,10 @@ categories = {
   }
 }
 
-
 # category => criterion => [ lytro, euclid, angellist, sincerely ]
 overall = {}
 numCriteria = 0
 categories.each do |category, criteria|
-
   this_cat = [0.0, 0.0, 0.0, 0.0]
   criteria.each do |criterion, ratings|
     ratings.each_index do |i|
@@ -115,10 +119,11 @@ weighted_avg.each_index do |i|
   weighted_avg[i] = ( ( weighted_avg[i] / categories.size ) * 10 ).ceil/10.0
 end
 
-puts "\navg, weighted by category:"
-puts "   lytro:     #{weighted_avg[0]}"
-puts "   euclid:    #{weighted_avg[1]}"
-puts "   angellist: #{weighted_avg[2]}"
-puts "   sincerely: #{weighted_avg[3]}"
+puts("----------------------------------")
+puts("avg, weighted by category:")
+puts("   lytro:     #{weighted_avg[0]}")
+puts("   euclid:    #{weighted_avg[1]}")
+puts("   angellist: #{weighted_avg[2]}")
+puts("   sincerely: #{weighted_avg[3]}")
 
 
