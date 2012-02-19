@@ -28,7 +28,7 @@ category_weights = {
   'daily life' => 'a',
   'potential' => 'y',
   'gut' => 'y',
-  'meta-goals' => 'm'
+  'meta-goals' => 'm',
 }
 
 # category => criteria => qualitative rating for [ lytro, euclid, angellist, sincerely ]
@@ -41,6 +41,11 @@ categories = {
     'living in SF' => %w{m y a a},
     'living young while young' => %w{w y a a},
     'build network' => %w{y m y y},
+    'want to be like founder(s)?' => %w{y m m y},
+    'want to be like coworkers?' => %w{w y y y},
+    'sense of working there in 6 months' => %w{y y m y},
+    'sense of working there in 12 months' => %w{y m y y},
+    'sense of working there in 24 months' => %w{m m m m},
   },
   'comp' => {
     'salary' => %w{y y m y},
@@ -65,6 +70,7 @@ categories = {
     'well rounded eng' => %w{m a m y},
     'work/life balance' => %w{a y m m},
     'remote work / flexibility' => %w{y m a w},
+    'wildcards' => %w{m y y a},
   },
   'daily life' => {
     'leadership role' => %w{m y y a},
