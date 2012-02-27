@@ -8,87 +8,86 @@ require 'pp'
 #    (order I filled out categories is top-> bottom, or fewer criteria -> more criteria)
 
 # note that these are NOT absolute ratings on companies, 
-# just my sense on how me and the company fit.
+# just my sense on personal fit.
 
 
 # qualitative_scores: when GIGO is a problem you need to remove choice and only
 # allow a few ratings: remove paradox of choice (i.e. 8/10? 9/10? 8.5/10?),
 # think of it as forcing me to shit or get off the pot.
 qs = {
-  'a' => 3, # absolutely
-  'y' => 2, # yes
-  'm' => 1, # maybe
-  'w' => -1 # worrisome
+  'a' => 6, # absolutely
+  'y' => 4, # yes
+  'm' => 2, # maybe
+  'w' => 1 # worrisome
 }
 
 # and you need to categorize. focusing down helps you evaluate better.
 category_weights = {
+  'daily life' => 'y',
+  'gut' => 'm',
   'culture' => 'y',
-  'comp' => 'm',
-  'daily life' => 'a',
+  'comp' => 'y',
+  'meta-goals' => 'y',
   'potential' => 'y',
-  'gut' => 'y',
-  'meta-goals' => 'm',
 }
 
-# category => criteria => qualitative rating for [ lytro, euclid, angellist, sincerely ]
+# category => criteria => qualitative rating for [ euclid, angellist ]
 categories = {
   'gut' => {
-    'looking at campus photos' => %w{w y y y},
-    'looking at personell photos' => %w{m y m y},
+    'looking at campus photos' => %w{y y},
+    'looking at personell photos' => %w{y m},
+    'want to go to work tomorrow' => %w{y m}
   },
   'meta-goals' => {
-    'living in SF' => %w{m y a a},
-    'living young while young' => %w{w y a a},
-    'build network' => %w{y m y y},
-    'want to be like founder(s)?' => %w{y m m y},
-    'want to be like coworkers?' => %w{w y y y},
-    'sense of working there in 6 months' => %w{y y m y},
-    'sense of working there in 12 months' => %w{y m y y},
-    'sense of working there in 24 months' => %w{m m m m},
+    'living in SF' => %w{y a},
+    'living young while young' => %w{y a},
+    'build network' => %w{m y},
+    'want to be like founder(s)?' => %w{m m},
+    'want to be like coworkers?' => %w{y m},
   },
   'comp' => {
-    'salary' => %w{y y m y},
-    'potential cashout' => %w{a y m m},
-    'perks' => %w{m y a a},
-    'location' => %w{w m y y}
+    'salary' => %w{a m},
+    'potential cashout' => %w{y m},
+    'perks' => %w{y y},
+    'location' => %w{m y}
   },
   'potential' => {
-    'founders' => %w{y y m y},
-    'no fail' => %w{a y m m},
-    'realistic market impact' => %w{y y m m},
-    'cool factor' => %w{y m y y},
-    'celebrity' => %w{y m y y},
-    'overall uncertainty' => %w{m y y m}
+    'founders' => %w{y y},
+    'no fail' => %w{y m},
+    'realistic market impact' => %w{y m},
+    'cool factor' => %w{m y},
+    'celebrity' => %w{m a},
+    'overall uncertainty' => %w{y y}
   },
   'culture' => {
-    'coworkers as friends' => %w{m y m a},
-    'coworkers as contacts' => %w{y m y y},
-    'shared values / importance of data' => %w{m a a a},
-    'no sleaze' => %w{a y m m},
-    'teaching/learning' => %w{y y y m},
-    'well rounded eng' => %w{m a m y},
-    'work/life balance' => %w{a y m m},
-    'remote work / flexibility' => %w{y m a w},
-    'wildcards' => %w{m y y a},
+    'coworkers as friends' => %w{y m},
+    'coworkers as contacts' => %w{m y},
+    'shared values / importance of data' => %w{a a},
+    'no sleaze' => %w{y m},
+    'teaching/learning' => %w{y m},
+    'well rounded eng' => %w{a m},
+    'work/life balance' => %w{y m},
+    'remote work / flexibility' => %w{m a},
+    'wildcards' => %w{y y},
   },
   'daily life' => {
-    'leadership role' => %w{m y y a},
-    'tech abilities of coworkers' => %w{m y y m},
-    'tools' => %w{m y y m},
-    'product' => %w{a y y m},
-    'mentor potential' => %w{y y y y},
-    'proj/tech design freedom' => %w{m y a m},
-    'learn from who work with' => %w{w y y m},
-    'lifestyle wildcard' => %w{w y m y},
+    'leadership role' => %w{y y},
+    'tech abilities of coworkers' => %w{y y},
+    'tools' => %w{y y},
+    'product' => %w{y y},
+    'mentor potential' => %w{y y},
+    'proj/tech design freedom' => %w{y a},
+    'learn from who work with' => %w{y y},
+    'lifestyle wildcard' => %w{y m},
   }
 }
+
 
 # category => criterion => [ lytro, euclid, angellist, sincerely ]
 overall = {}
 numCriteria = 0
 categories.each do |category, criteria|
-  this_cat = [0.0, 0.0, 0.0, 0.0]
+  this_cat = [0.0, 0.0]
   criteria.each do |criterion, ratings|
     ratings.each_index do |i|
       this_cat[i] += qs[ratings[i]]
@@ -105,12 +104,10 @@ end
 
 overall.each do |category, ratings|
   puts "#{category}: #{category_weights[category]}, scaled by factor of #{qs[category_weights[category]]}"
-  puts "   lytro:     #{ratings[0]}"
-  puts "   euclid:    #{ratings[1]}"
-  puts "   angellist: #{ratings[2]}"
-  puts "   sincerely: #{ratings[3]}"
+  puts "   euclid:    #{ratings[0]}"
+  puts "   angellist: #{ratings[1]}"
 end
-  
+
 # weight based on category
 weighted_sum = [0.0, 0.0, 0.0, 0.0]
 overall.each do |category, ratings|
@@ -127,9 +124,7 @@ end
 
 puts("----------------------------------")
 puts("avg, weighted by category:")
-puts("   lytro:     #{weighted_avg[0]}")
-puts("   euclid:    #{weighted_avg[1]}")
-puts("   angellist: #{weighted_avg[2]}")
-puts("   sincerely: #{weighted_avg[3]}")
+puts("   euclid:    #{weighted_avg[0]}")
+puts("   angellist: #{weighted_avg[1]}")
 
 
